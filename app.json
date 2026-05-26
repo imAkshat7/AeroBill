@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "AeroBill",
+    "slug": "aerobill",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/aerobill.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "package": "com.antigravity.aerobill",
+      "minSdkVersion": 26,
+      "adaptiveIcon": {
+        "backgroundColor": "#000000",
+        "foregroundImage": "./assets/aerobill.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8c384d53-ef74-4b01-8103-4c8fa13856fd"
+      }
+    },
+    "owner": "hunterakki"
+  }
+}
