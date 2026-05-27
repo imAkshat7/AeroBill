@@ -1,6 +1,47 @@
 import * as SQLite from 'expo-sqlite';
 
-const db = SQLite.openDatabaseSync('invoicemate.db');
+let internalDb: SQLite.SQLiteDatabase | null = null;
+
+export const getDb = (): SQLite.SQLiteDatabase => {
+  if (!internalDb) {
+    try {
+      internalDb = SQLite.openDatabaseSync('invoicemate.db');
+    } catch (error) {
+      console.error('Failed to open SQLite database synchronously:', error);
+      throw error;
+    }
+  }
+  return internalDb;
+};
+
+// Create a safe delegating object that forwards calls to the dynamically-opened instance,
+// avoiding JSI HostObject Proxy wrapping issues which crash Hermes on startup.
+export const db = {
+  getFirstAsync<T>(query: string, ...params: any[]): Promise<T | null> {
+    return getDb().getFirstAsync<T>(query, ...params);
+  },
+  getAllAsync<T>(query: string, ...params: any[]): Promise<T[]> {
+    return getDb().getAllAsync<T>(query, ...params);
+  },
+  runAsync(query: string, ...params: any[]): Promise<SQLite.SQLiteRunResult> {
+    return getDb().runAsync(query, ...params);
+  },
+  execAsync(query: string): Promise<void> {
+    return getDb().execAsync(query);
+  },
+  withTransactionAsync<T>(action: () => Promise<T>): Promise<T> {
+    return getDb().withTransactionAsync(action);
+  },
+  withTransactionSync<T>(action: () => T): T {
+    return getDb().withTransactionSync(action);
+  },
+  closeAsync(): Promise<void> {
+    return getDb().closeAsync();
+  },
+  closeSync(): void {
+    return getDb().closeSync();
+  }
+} as unknown as SQLite.SQLiteDatabase;
 
 export const runMigrations = async (): Promise<void> => {
   // Unconditional failsafe migration check for businesses columns
