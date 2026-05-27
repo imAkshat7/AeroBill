@@ -22,7 +22,7 @@ type HomeStackParamList = {
 type NavigationProp = StackNavigationProp<HomeStackParamList & { InvoicesTab: undefined }>;
 
 export const HomeScreen: React.FC = () => {
-  const { colors, typography, spacing, isDark } = useTheme();
+  const { colors, typography, spacing, borderRadius, isDark } = useTheme();
   const navigation = useNavigation<NavigationProp>();
   const insets = useSafeAreaInsets();
   
