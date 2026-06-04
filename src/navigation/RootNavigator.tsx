@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HomeStack } from './HomeStack';
 import { InvoicesStack } from './InvoicesStack';
 import { CustomersStack } from './CustomersStack';
@@ -12,6 +13,11 @@ const Tab = createBottomTabNavigator();
 
 export const RootNavigator: React.FC = () => {
   const { colors, typography } = useTheme();
+  const insets = useSafeAreaInsets();
+
+  // Base tab bar height + safe area bottom (handles both gesture and button navigation)
+  const TAB_BAR_BASE_HEIGHT = 60;
+  const tabBarHeight = TAB_BAR_BASE_HEIGHT + insets.bottom;
 
   return (
     <Tab.Navigator
@@ -32,8 +38,8 @@ export const RootNavigator: React.FC = () => {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
           borderTopWidth: 1.5,
-          height: 60,
-          paddingBottom: 8,
+          height: tabBarHeight,
+          paddingBottom: insets.bottom + 8,
           paddingTop: 8,
         },
         tabBarActiveTintColor: colors.accent,
